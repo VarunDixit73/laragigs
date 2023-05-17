@@ -1,21 +1,15 @@
-FROM php:7.4-apache
+FROM php:8.0.5
 
 # Set working directory
 WORKDIR /var/www/html
 
 # Install dependencies
-RUN apt-get update && \
-    apt-get install -y \
-    libzip-dev \
-    unzip \
-    && docker-php-ext-install \
-    zip \
-    pdo_mysql \
-    && a2enmod \
-    rewrite
+RUN apt-get update -y && apt-get install -y openssl zip unzip git
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN docker-php-ext-install pdo mbstring
 
 # Copy project files
 COPY . /var/www/html
