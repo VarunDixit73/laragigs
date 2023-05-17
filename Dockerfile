@@ -9,7 +9,10 @@ RUN apt-get update -y && apt-get install -y openssl zip unzip git
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN docker-php-ext-install pdo mbstring
+ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
+    install-php-extensions pdo_mbstring
 
 # Copy project files
 COPY . /var/www/html
